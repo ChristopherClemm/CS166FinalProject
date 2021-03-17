@@ -299,15 +299,151 @@ public class DBproject{
 	}
 
 	public static void AddCaptain(DBproject esql) {//2
+	int id;
+	String nationality;
+	String name;
+	String query;
+	do{
+	System.out.print("Input captain ID number: ");
+	try{
+		id = Integer.parseInt(in.readLine());
+		break;
+	}
+	catch(Exception e){
+		System.out.println("Your input is invalid!");
+		continue;
+	   }
+	}while(true);
+	do {
+		System.out.print("Input captain name: ");
+		try{
+			name = in.readLine();
+			if(name.length()<= 0 || name.length() > 128){
+				throw new RuntimeException("Captain name cannot exceed 128 characters or be empty");
+			}
+			break;
+		}catch(Exception e){
+			System.out.println(e);
+			continue;
+		}
+	}while(true);
+	do{
+		System.out.print("Input captain nationality: ");
+	try{
+		nationality = in.readLine();
+		if(nationality.length() <= 0 || nationality.length() > 24){
+			throw new RuntimeException("Captain nationality cannot exceed 24 characters or be empty");
+		}
+		break;
+	}catch(Exception e){
+		System.out.println(e);
+		continue;
+	}
+	}while(true);
+	try{
+		query = "INSERT INTO Captain VALUES (" + id + ", \'" + name + "\', \'" + nationality + "\');";
+		esql.executeUpdate(query);
+	}
+	catch(Exception e){
+		System.out.println(e.getMessage());
 	}
 
+	}
 	public static void AddCruise(DBproject esql) {//3
 	}
 
 
 	public static void BookCruise(DBproject esql) {//4
-		// Given a customer and a Cruise that he/she wants to book, add a reservation to the DB
+	int id;
+	int number;
+	
+	do{
+		System.out.print("Input customer id: ");
+		try{
+			id = Integer.parseInt(in.readLine());
+			break;
+		}catch(Exception e){
+			System.out.println("Invalid input");
+			continue;
+		}
+	
+	}while(true);
+	do{
+		System.out.print("Input cruiser number: ");
+		try{
+			number = Integer.parseInt(in.readLine());
+			break;
+		}catch(Exception e){
+			System.out.println("Invalid cruise number");
+			continue;
+		}
+	}while(true);
+	
+	try{
+	String query;
+	String input;
+	int result;
+	int reserve;
+	String status;
+	query = "SELECT status\nFROM Reservation\nWHERE ccid = " + id + "AND cid = " + number + ";";
+	result = esql.executeQuery(query);
+	if(result == 0) {
+		do{
+			System.out.println("Reservation does not exist.  Would you like to book a reservation? (yes/no)");
+			try{
+				input = in.readLine();
+				if(input.equals("yes")){
+					//int reserve;
+					//String status;
+					
+					do{
+						System.out.print("Input new reservation number: ");
+						try{
+							reserve = Integer.parseInt(in.readLine());
+							break;
+						}catch (Exception e){
+							System.out.println("Your input is invald");
+							continue;
+						}
+					}while(true);
+					
+					do{
+						System.out.print("Input new reservation status: 'W', 'C', or 'R'\n");
+						try{
+							status = in.readLine();
+							if(!status.equals("W") && !status.equals("C") && !status.equals("R")){
+								throw new RuntimeException("Only accepts W, C, R");
+							}
+							break;
+						}catch (Exception e){
+							System.out.println(e);
+							continue;
+						}
+					}while(true);
+					try{
+						query = "INSERT INTO Reservation VALUES (" + reserve + "," + id + ", " + number + ", \'" + status + "\');";
+						esql.executeUpdate(query);
+					}catch(Exception e){
+						System.out.println(e.getMessage());
+					}
+				}else if(input.equals("no")){break;}
+				else{ throw new RuntimeException("input is invalid");}
+				break;	
+			}
+			catch(Exception e){
+				System.out.println(e);
+				continue;
+			}
+		}while(true);
 	}
+	else{
+	
+	}catch(Exception e){
+		System.err.println(e.getMessage());
+	}
+	}
+	// Given a customer and a Cruise that he/she wants to book, add a reservation to the DB
+
 
 	public static void ListNumberOfAvailableSeats(DBproject esql) {//5
 		// For Cruise number and date, find the number of availalbe seats (i.e. total Ship capacity minus booked seats )
