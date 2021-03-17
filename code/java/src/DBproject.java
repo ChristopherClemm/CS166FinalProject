@@ -23,7 +23,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 /**
  * This class defines a simple embedded SQL utility class that is designed to
  * work with PostgreSQL JDBC drivers.
@@ -296,14 +297,229 @@ public class DBproject{
 	}//end readChoice
 
 	public static void AddShip(DBproject esql) {//1
+	int ID;
+	String make;
+	String model;
+	int age;
+	int seats;
+	String query;
+	do{
+		System.out.print("Enter in Ship ID: ");
+		try{
+			ID = Integer.parseInt(in.readLine());
+			break;
+		}catch (Exception e) {
+			System.out.println("Your input is invalid! : " + e.getMessage());
+			continue;
+		}
+	} while(true);
+	
+	do{
+                System.out.print("Enter in Ship Make: ");
+                try{
+                        make = in.readLine();
+			if(make.length() > 32 || make.length() <= 0)
+			{
+				throw new RuntimeException("Ship Make input is invalid");
+			}
+                        break;
+                }catch (Exception e) {
+                        System.out.println("Your input is invalid! : " + e.getMessage());
+                        continue;
+                }
+        } while(true);
+	
+	 do{
+                System.out.print("Enter in Ship Model: ");
+                try{
+                        model = in.readLine();
+                        if(model.length() > 64 || model.length() <= 0)
+                        {
+                                throw new RuntimeException("Ship Model input is invalid");
+                        }
+                        break;
+                }catch (Exception e) {
+                        System.out.println("Your input is invalid! : " + e.getMessage());
+                        continue;
+                }
+        } while(true);
+	 
+	do{
+                System.out.print("Enter in Ship Age: ");
+                try{
+                        age = Integer.parseInt(in.readLine());
+                        if(age <= 0)
+                        {
+                                throw new RuntimeException("Ship Age input is invalid. Needs to be 0 or more");
+                        }
+                        break;
+                }catch (Exception e) {
+                        System.out.println("Your input is invalid! : " + e.getMessage());
+                        continue;
+                }
+        } while(true);
+	 do{
+                System.out.print("Enter in number of seats on the Ship: ");
+                try{
+                        seats = Integer.parseInt(in.readLine());
+                        if(seats <= 0 || seats > 500)
+                        {
+                                throw new RuntimeException("Ship Age input is invalid. Needs to be 0 or more or less than 500");
+                        }
+                        break;
+                }catch (Exception e) {
+                        System.out.println("Your input is invalid! : " + e.getMessage());
+                        continue;
+                }
+        } while(true);
+
+	//where we run the query
+	try{
+		query = "INSERT INTO Ship VALUES (" + ID + ", \'" + make + "\', \'" + model + "\', " + age + ", " + seats + ");";
+		esql.executeUpdate(query); 
+		
+	}catch (Exception e)
+	{
+		 System.out.println("Your input is invalid! : " + e.getMessage());
+                 
 	}
+}
 
 	public static void AddCaptain(DBproject esql) {//2
 	}
 
 	public static void AddCruise(DBproject esql) {//3
-	}
+	int cnum;
+	int cost;
+	int num_sold;
+	int num_stops;
+	String actual_departure_date;
+	String actual_arrival_date;
+	String arrival_port;
+	String departure_port;	
+	String query;
+	DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	 do{
+                System.out.print("Enter in Cruise Number: ");
+                try{
+                        cnum = Integer.parseInt(in.readLine());
+                        break;
+                }catch (Exception e) {
+                        System.out.println("Your input is invalid! : " + e.getMessage());
+                        continue;
+                }
+        } while(true);
 
+        do{
+                System.out.print("Enter in Cruise Cost: ");
+                try{
+                        cost  = Integer.parseInt(in.readLine());
+                        if(cost <= 0)
+                        {
+                                throw new RuntimeException("Ship Cost input is invalid. Must be larger than 0");
+                        }
+                        break;
+                }catch (Exception e) {
+                        System.out.println("Your input is invalid! : " + e.getMessage());
+                        continue;
+                }
+        } while(true);
+	
+	do{
+                System.out.print("Enter in number of tickets sold: ");
+                try{
+                        num_sold = Integer.parseInt(in.readLine());
+                        if(num_sold < 0)
+                        {
+                                throw new RuntimeException("Ship Tickets sold input is invalid. Must be larger than -1");
+                        }
+                        break;
+                }catch (Exception e) {
+                        System.out.println("Your input is invalid! : " + e.getMessage());
+                        continue;
+                }
+        } while(true);
+	
+	 do{
+                System.out.print("Enter in number of stops: ");
+                try{
+                        num_stops = Integer.parseInt(in.readLine());
+                        if(num_stops < 0)
+                        {
+                                throw new RuntimeException("Ship stops input is invalid. Must be larger than -1");
+                        }
+                        break;
+                }catch (Exception e) {
+                        System.out.println("Your input is invalid! : " + e.getMessage());
+                        continue;
+                }
+        } while(true);
+
+	 do{
+                System.out.print("Enter in actual departure date in the format of yyyy-MM-dd HH:mm: ");
+                try{
+                        actual_departure_date = in.readLine();
+			LocalDate localD = LocalDate.parse(actual_departure_date, dateFormat);
+                        break;
+                }catch (Exception e) {
+                        System.out.println("Your input is invalid! : " + e.getMessage());
+                        continue;
+                }
+        } while(true);
+
+	 do{
+                System.out.print("Enter in actual arrival date in the format of yyyy-MM-dd HH:mm: ");
+                try{
+                        actual_arrival_date = in.readLine();
+                        LocalDate localA = LocalDate.parse(actual_arrival_date, dateFormat);
+                        break;
+                }catch (Exception e) {
+                        System.out.println("Your input is invalid! : " + e.getMessage());
+                        continue;
+                }
+        } while(true);
+	
+	 do{
+                System.out.print("Enter in arrival port code: ");
+                try{
+                        arrival_port = in.readLine();
+                        if(arrival_port.length() > 5 || arrival_port.length() <= 0)
+                        {
+                                throw new RuntimeException("Arrival port input is invalid");
+                        }
+                        break;
+                }catch (Exception e) {
+                        System.out.println("Your input is invalid! : " + e.getMessage());
+                        continue;
+                }
+        } while(true);
+	
+	 do{
+                System.out.print("Enter in departure port code: ");
+                try{
+                        departure_port = in.readLine();
+                        if(departure_port.length() > 5 || departure_port.length() <= 0)
+                        {
+                                throw new RuntimeException("Arrival port input is invalid");
+                        }
+                        break;
+                }catch (Exception e) {
+                        System.out.println("Your input is invalid! : " + e.getMessage());
+                        continue;
+                }
+        } while(true);
+
+	try{
+		query = "INSERT INTO Cruise VALUES (" + cnum + ", " + cost + ", " + num_sold + ", " + num_stops + ", \'" + actual_departure_date + "\', \'" + actual_arrival_date + "\', \'" + arrival_port + "\', \'" + departure_port +"\');";
+		esql.executeUpdate(query);
+	}
+	catch(Exception e)
+	{
+		System.out.println("Your Query failed! : " + e.getMessage());
+
+
+	}
+	}
 
 	public static void BookCruise(DBproject esql) {//4
 		// Given a customer and a Cruise that he/she wants to book, add a reservation to the DB
