@@ -385,7 +385,7 @@ public class DBproject{
 	int result;
 	int reserve;
 	String status;
-	query = "SELECT status\nFROM Reservation\nWHERE ccid = " + id + "AND cid = " + number + ";";
+	query = "SELECT status\nFROM Reservation\nWHERE ccid = " + number + "AND cid = " + id + ";";
 	result = esql.executeQuery(query);
 	if(result == 0) {
 		do{
@@ -437,6 +437,40 @@ public class DBproject{
 		}while(true);
 	}
 	else{
+		do{
+			try{
+				System.out.println("Update reservation? (yes/no)");
+				input = in.readLine();
+				if(input.equals("yes")){
+					do{
+						System.out.print("Update reservation status: 'W', 'C', or 'R'\n");
+						try{
+							status = in.readLine();
+							if(!status.equals("W") && !status.equals("C") && !status.equals("R")){
+								throw new RuntimeException("Only accepts W, C, R");
+							}break;
+						}catch(Exception e){
+							System.out.println(e);
+							continue;
+						}
+					}while(true);
+					try{
+						query = "UPDATE Reservation SET status = \'" + status + "\' WHERE cid = " + id  + "AND ccid = "+ number + ";";
+						esql.executeUpdate(query);
+					}catch(Exception e){
+						System.out.println(e.getMessage());
+					}
+				}
+				else if(input.equals("no")){break;}
+				else{throw new RuntimeException ("input is invald");}
+				break;
+			}catch(Exception e){
+				System.out.println(e);
+				continue;
+			}
+		}
+		while(true);
+	}	
 	
 	}catch(Exception e){
 		System.err.println(e.getMessage());
