@@ -385,7 +385,7 @@ public class DBproject{
 	int result;
 	int reserve;
 	String status;
-	query = "SELECT status\nFROM Reservation\nWHERE ccid = " + number + "AND cid = " + id + ";";
+	query = "SELECT status\nFROM Reservation\nWHERE cid = " + number + "AND ccid = " + id + ";";
 	result = esql.executeQuery(query);
 	if(result == 0) {
 		do{
