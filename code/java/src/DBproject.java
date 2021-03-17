@@ -532,10 +532,81 @@ public class DBproject{
 
 	public static void ListsTotalNumberOfRepairsPerShip(DBproject esql) {//6
 		// Count number of repairs per Ships and list them in descending order
+		String query;
+		try{
+			query = "SELECT S.id AS ShipID, count(R.rid) FROM Ship S, Repairs R WHERE S.id = R.ship_id GROUP BY S.id ORDER BY count DESC;";
+			esql.executeQueryAndPrintResult(query);  	
+		}catch(Exception e)
+		{
+			System.out.println("Your Query failed! : " + e.getMessage());
+		}
 	}
 
 	
 	public static void FindPassengersCountWithStatus(DBproject esql) {//7
 		// Find how many passengers there are with a status (i.e. W,C,R) and list that number.
+		int cnum;
+		String check1Query;
+		int result = 1;
+		String pass_stat;
+		String query;
+		
+		do{
+                System.out.print("Enter in Cruise Number you want: ");
+                try{
+                        cnum = Integer.parseInt(in.readLine());
+                        if(cnum < 0)
+                        {
+                                throw new RuntimeException("cnum input is invalid");
+                        }
+                        break;
+                }catch (Exception e) {
+                        System.out.println("Your input is invalid! : " + e.getMessage());
+                        continue;
+                }		
+        	} while(true);
+		
+		try{
+		    check1Query = "SELECT * FROM Cruise C WHERE C.cnum = " + cnum + ";";
+			result = esql.executeQuery(check1Query); 	
+		}
+		catch(Exception e)
+		{
+			 System.out.println("Your Query failed! : " + e.getMessage());
+		 
+		}
+		if(result == 0)
+		{
+			System.out.println("There is no cruise number " + cnum + " in our database");
+			return;
+		}
+		
+
+		do{
+                System.out.print("Enter in Passenger status: ");
+                try{
+                        pass_stat = in.readLine();
+			//System.out.println( pass_stat.equals("W"));
+                        if(!(pass_stat.equals("W") || pass_stat.equals("C") || pass_stat.equals("R"))) 
+                        {
+                                throw new RuntimeException("Passenger status input is invalid");
+                        }
+                        break;
+                }catch (Exception e) {
+                        System.out.println("Your input is invalid! : " + e.getMessage());
+                        continue;
+                }
+        	} while(true);
+
+		try{
+			query = "SELECT COUNT(R.ccid) FROM Reservation R WHERE R.cid = " + cnum + " AND R.status = \'" + pass_stat + "\';";
+			esql.executeQueryAndPrintResult(query);  			
+
+		}catch(Exception e)
+		{
+			 System.out.println("Your Query failed! : " + e.getMessage());
+		}
+		
+	
 	}
 }
