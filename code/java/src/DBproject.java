@@ -578,7 +578,7 @@ public class DBproject{
 		
 
 		try{
-                        query = "SELECT COUNT(R.ccid) FROM Reservation R WHERE R.cid = " + cnum + " AND R.status = \'" + pass_stat + "\';";
+                        query = "SELECT S1.seats - CC.num_sold AS seatsAvaliable FROM Ship S1, Cruise CC WHERE S1.id = (SELECT DISTINCT CI.ship_id  FROM Cruise C, Ship S, CruiseInfo CI WHERE CI.cruise_id = " + cnum + ") AND CC.cnum = " + cnum + " AND CC.actual_departure_date = \'"+ date + "\';";
                         esql.executeQueryAndPrintResult(query);
 
                 }catch(Exception e)
