@@ -528,6 +528,68 @@ public class DBproject{
 
 	public static void ListNumberOfAvailableSeats(DBproject esql) {//5
 		// For Cruise number and date, find the number of availalbe seats (i.e. total Ship capacity minus booked seats )
+		String query;
+		String check1Query;
+		int cnum;
+		String date;
+		int result = 1;
+		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		 do{
+                System.out.print("Enter in Cruise Number you want: ");
+                try{
+                        cnum = Integer.parseInt(in.readLine());
+                        if(cnum < 0)
+                        {
+                                throw new RuntimeException("cnum input is invalid");
+                        }
+                        break;
+                }catch (Exception e) {
+                        System.out.println("Your input is invalid! : " + e.getMessage());
+                        continue;
+                }
+                } while(true);
+	
+		 do{
+                System.out.print("Enter in the date in the format of yyyy-MM-dd HH:mm: ");
+                try{
+                        date = in.readLine();
+                        LocalDate localA = LocalDate.parse(date, dateFormat);
+                        break;
+                }catch (Exception e) {
+                        System.out.println("Your input is invalid! : " + e.getMessage());
+                        continue;
+                }
+        	} while(true);
+
+		try{
+                    check1Query = "SELECT * FROM Cruise C WHERE C.cnum = " + cnum + " AND C.actual_departure_date =\' "+ date + "\';";
+                        result = esql.executeQuery(check1Query);
+                }
+                catch(Exception e)
+                {
+                         System.out.println("Your Query failed! : " + e.getMessage());
+
+                }
+                if(result == 0)
+                {
+                        System.out.println("There is no cruise number " + cnum + " with that specific date in our database");
+                        return;
+                }
+		
+
+		try{
+                        query = "SELECT COUNT(R.ccid) FROM Reservation R WHERE R.cid = " + cnum + " AND R.status = \'" + pass_stat + "\';";
+                        esql.executeQueryAndPrintResult(query);
+
+                }catch(Exception e)
+                {
+                         System.out.println("Your Query failed! : " + e.getMessage());
+                }
+
+		
+
+		
+
 	}
 
 	public static void ListsTotalNumberOfRepairsPerShip(DBproject esql) {//6
