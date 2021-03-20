@@ -1,6 +1,6 @@
 # CS166FinalProject
 
-#### Assumptions
+## Assumptions
 ##### Cruises can only have up to 500 people(SQL create tables ays so)
 ##### Time must be imputted as yyyy-MM-dd HH:mm
 ##### Ship make < 32
